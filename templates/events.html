@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title">Event History</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <select class="form-select" id="filter-severity">
+                                <option value="">All Severities</option>
+                                <option value="info">Info</option>
+                                <option value="warning">Warning</option>
+                                <option value="error">Error</option>
+                                <option value="critical">Critical</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" id="filter-type">
+                                <option value="">All Types</option>
+                                <option value="process">Process</option>
+                                <option value="transaction">Transaction</option>
+                                <option value="deadlock">Deadlock</option>
+                                <option value="recovery">Recovery</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Type</th>
+                                    <th>Severity</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody id="events-table">
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">No events</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/events.js') }}"></script>
+{% endblock %}

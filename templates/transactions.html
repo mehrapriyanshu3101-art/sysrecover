@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title">Create Transaction</h6>
+                </div>
+                <div class="card-body">
+                    <form id="transaction-form">
+                        <div class="mb-3">
+                            <label class="form-label">Transaction Type</label>
+                            <select class="form-select" id="transaction-type">
+                                <option value="general">General</option>
+                                <option value="transfer">Transfer</option>
+                                <option value="update">Update</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Create Transaction</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title">Transaction Operations</h6>
+                </div>
+                <div class="card-body">
+                    <form id="operation-form">
+                        <div class="mb-3">
+                            <label class="form-label">Select Transaction</label>
+                            <select class="form-select" id="select-transaction" required>
+                                <option value="">Select a transaction</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Operation</label>
+                            <select class="form-select" id="operation-type">
+                                <option value="read">Read</option>
+                                <option value="write">Write</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Data Item</label>
+                            <select class="form-select" id="data-item">
+                                <option value="A">Account A</option>
+                                <option value="B">Account B</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="new-value-group" style="display: none;">
+                            <label class="form-label">New Value</label>
+                            <input type="number" class="form-control" id="new-value">
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Execute Operation</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title">Transactions</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>2PL State</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactions-table">
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">No transactions</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title">Simulated Data Store</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="data-item">
+                                <h6>Account A</h6>
+                                <h3 id="data-A">100</h3>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="data-item">
+                                <h6>Account B</h6>
+                                <h3 id="data-B">200</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/transactions.js') }}"></script>
+{% endblock %}

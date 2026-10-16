@@ -1,0 +1,2 @@
+-- Schema is managed by SQLAlchemy models
+-- See models/ directory for table definitions

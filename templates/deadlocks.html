@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title">Deadlock Detection</h6>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-warning w-100 mb-2" onclick="detectDeadlock()">
+                        <i class="bi bi-search"></i> Detect Deadlock
+                    </button>
+                    <button class="btn btn-danger w-100" onclick="recoverDeadlock()">
+                        <i class="bi bi-arrow-counterclockwise"></i> Recover
+                    </button>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title">Status</h6>
+                </div>
+                <div class="card-body">
+                    <div id="deadlock-status">
+                        <p class="text-muted">Click "Detect Deadlock" to check</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title">Wait-For Graph</h6>
+                </div>
+                <div class="card-body">
+                    <div id="wait-for-graph" style="height: 300px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 8px;">
+                        <p class="text-muted">Graph visualization to be implemented</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title">Deadlock Information</h6>
+                </div>
+                <div class="card-body">
+                    <div id="deadlock-info">
+                        <p class="text-muted">No deadlock information available</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/deadlocks.js') }}"></script>
+{% endblock %}

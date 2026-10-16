@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title">Run Scheduling</h6>
+                </div>
+                <div class="card-body">
+                    <form id="scheduling-form">
+                        <div class="mb-3">
+                            <label class="form-label">Algorithm</label>
+                            <select class="form-select" id="scheduling-algorithm">
+                                <option value="fcfs">FCFS (First-Come, First-Served)</option>
+                                <option value="sjf">SJF (Shortest Job First)</option>
+                                <option value="srtf">SRTF (Shortest Remaining Time First)</option>
+                                <option value="round_robin">Round Robin</option>
+                                <option value="priority">Priority Scheduling</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="time-quantum-group" style="display: none;">
+                            <label class="form-label">Time Quantum</label>
+                            <input type="number" class="form-control" id="time-quantum" value="2">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Run Algorithm</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title">Metrics</h6>
+                </div>
+                <div class="card-body">
+                    <div id="scheduling-metrics">
+                        <p class="text-muted">Run scheduling to see metrics</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title">Gantt Chart</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="ganttChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title">Results</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Process</th>
+                                    <th>Arrival</th>
+                                    <th>Burst</th>
+                                    <th>Completion</th>
+                                    <th>Turnaround</th>
+                                    <th>Waiting</th>
+                                </tr>
+                            </thead>
+                            <tbody id="scheduling-results">
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No results yet</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/scheduling.js') }}"></script>
+{% endblock %}

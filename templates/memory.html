@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title">Memory Simulation</h6>
+                </div>
+                <div class="card-body">
+                    <form id="memory-form">
+                        <div class="mb-3">
+                            <label class="form-label">Reference String (comma-separated)</label>
+                            <input type="text" class="form-control" id="reference-string" placeholder="1,2,3,4,1,2,5,1,2,3,4,5" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Number of Frames</label>
+                            <input type="number" class="form-control" id="num-frames" value="3" min="1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Algorithm</label>
+                            <select class="form-select" id="memory-algorithm">
+                                <option value="fifo">FIFO (First-In, First-Out)</option>
+                                <option value="lru">LRU (Least Recently Used)</option>
+                                <option value="optimal">Optimal</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Run Simulation</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title">Results</h6>
+                </div>
+                <div class="card-body">
+                    <div id="memory-results">
+                        <p class="text-muted">Run simulation to see results</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title">Frame Visualization</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="memoryChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title">Step-by-Step</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Step</th>
+                                    <th>Page</th>
+                                    <th>Frames</th>
+                                    <th>Fault</th>
+                                </tr>
+                            </thead>
+                            <tbody id="memory-steps">
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">No steps yet</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/memory.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title">About SysRecover</h6>
+                </div>
+                <div class="card-body">
+                    <h5>SysRecover - OS-DBMS Simulation Platform</h5>
+                    <p>SysRecover is an interactive educational platform that demonstrates the interaction between operating system processes, memory management, and database transaction systems.</p>
+                    
+                    <h6 class="mt-4">Features</h6>
+                    <ul>
+                        <li><strong>CPU Scheduling:</strong> FCFS, SJF, SRTF, Round Robin, Priority Scheduling</li>
+                        <li><strong>Memory Management:</strong> FIFO, LRU, Optimal page replacement</li>
+                        <li><strong>Transaction Management:</strong> ACID properties demonstration</li>
+                        <li><strong>Lock-based Concurrency Control:</strong> Shared/Exclusive locks, Two-Phase Locking</li>
+                        <li><strong>Deadlock Detection and Recovery:</strong> Wait-for graph analysis</li>
+                        <li><strong>Database Crash Recovery:</strong> UNDO/REDO with write-ahead logging</li>
+                        <li><strong>Smart Diagnostics:</strong> Rule-based performance analysis</li>
+                    </ul>
+                    
+                    <h6 class="mt-4">Technology Stack</h6>
+                    <ul>
+                        <li><strong>Backend:</strong> Python 3, Flask, SQLAlchemy, SQLite</li>
+                        <li><strong>Frontend:</strong> HTML5, Bootstrap 5, Vanilla JavaScript, Chart.js</li>
+                    </ul>
+                    
+                    <h6 class="mt-4">Educational Purpose</h6>
+                    <p>This application is designed for educational purposes to help students understand the complex interactions between OS and DBMS mechanisms. All operations are simulated and do not affect the host system.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

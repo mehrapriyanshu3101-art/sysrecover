@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="card-title">Smart Diagnostics</h6>
+                    <button class="btn btn-primary" onclick="runDiagnostics()">
+                        <i class="bi bi-activity"></i> Run Diagnostics
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div id="diagnostics-results">
+                        <p class="text-muted">Click "Run Diagnostics" to analyze the simulation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title">Before/After Comparison</h6>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Comparison feature to be implemented</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/diagnostics.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title">Recovery Actions</h6>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-primary w-100 mb-2" onclick="createCheckpoint()">
+                        <i class="bi bi-bookmark"></i> Create Checkpoint
+                    </button>
+                    <button class="btn btn-danger w-100 mb-2" onclick="simulateCrash()">
+                        <i class="bi bi-lightning"></i> Simulate Crash
+                    </button>
+                    <button class="btn btn-success w-100" onclick="performRecovery()">
+                        <i class="bi bi-arrow-counterclockwise"></i> Perform Recovery
+                    </button>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title">Recovery Status</h6>
+                </div>
+                <div class="card-body">
+                    <div id="recovery-status">
+                        <p class="text-muted">No recovery actions performed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title">Recovery Log</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>LSN</th>
+                                    <th>Transaction</th>
+                                    <th>Operation</th>
+                                    <th>Data Item</th>
+                                    <th>Old Value</th>
+                                    <th>New Value</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recovery-log-table">
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No log entries</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title">Checkpoints</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>LSN</th>
+                                    <th>Timestamp</th>
+                                    <th>Active Transactions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="checkpoint-table">
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">No checkpoints</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/recovery.js') }}"></script>
+{% endblock %}

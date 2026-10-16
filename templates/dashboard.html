@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Metrics Cards -->
+    <div class="row metrics-row">
+        <div class="col-md-3">
+            <div class="metric-card">
+                <div class="metric-icon process-icon">
+                    <i class="bi bi-cpu"></i>
+                </div>
+                <div class="metric-info">
+                    <h6 class="metric-label">Processes</h6>
+                    <h3 class="metric-value" id="metric-processes">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card">
+                <div class="metric-icon transaction-icon">
+                    <i class="bi bi-database"></i>
+                </div>
+                <div class="metric-info">
+                    <h6 class="metric-label">Transactions</h6>
+                    <h3 class="metric-value" id="metric-transactions">0</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card">
+                <div class="metric-icon status-icon">
+                    <i class="bi bi-activity"></i>
+                </div>
+                <div class="metric-info">
+                    <h6 class="metric-label">Status</h6>
+                    <h3 class="metric-value" id="metric-status">-</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card">
+                <div class="metric-icon event-icon">
+                    <i class="bi bi-journal-text"></i>
+                </div>
+                <div class="metric-info">
+                    <h6 class="metric-label">Recent Events</h6>
+                    <h3 class="metric-value" id="metric-events">0</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row charts-row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title">Simulation Activity</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="activityChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title">Resource Distribution</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="resourceChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Events -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title">Recent Events</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Type</th>
+                                    <th>Severity</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-events-table">
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">No events yet</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title">Quick Actions</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-primary" onclick="window.location.href='/processes'">
+                            <i class="bi bi-plus"></i> Add Process
+                        </button>
+                        <button class="btn btn-outline-success" onclick="window.location.href='/scheduling'">
+                            <i class="bi bi-play"></i> Run Scheduling
+                        </button>
+                        <button class="btn btn-outline-warning" onclick="window.location.href='/memory'">
+                            <i class="bi bi-memory"></i> Memory Sim
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="window.location.href='/recovery'">
+                            <i class="bi bi-arrow-counterclockwise"></i> Crash Recovery
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

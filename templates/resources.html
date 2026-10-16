@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title">Create Resource</h6>
+                </div>
+                <div class="card-body">
+                    <form id="resource-form">
+                        <div class="mb-3">
+                            <label class="form-label">Resource Name</label>
+                            <input type="text" class="form-control" id="resource-name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Resource Type</label>
+                            <select class="form-select" id="resource-type">
+                                <option value="general">General</option>
+                                <option value="io">I/O Device</option>
+                                <option value="memory">Memory</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Total Instances</label>
+                            <input type="number" class="form-control" id="total-instances" value="1" min="1" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Create Resource</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title">Request Lock</h6>
+                </div>
+                <div class="card-body">
+                    <form id="lock-form">
+                        <div class="mb-3">
+                            <label class="form-label">Transaction</label>
+                            <select class="form-select" id="lock-transaction" required>
+                                <option value="">Select transaction</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Resource</label>
+                            <select class="form-select" id="lock-resource" required>
+                                <option value="">Select resource</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Lock Type</label>
+                            <select class="form-select" id="lock-type">
+                                <option value="shared">Shared (Read)</option>
+                                <option value="exclusive">Exclusive (Write)</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Request Lock</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title">Resources</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Total</th>
+                                    <th>Available</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resources-table">
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">No resources</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title">Locks</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Transaction</th>
+                                    <th>Resource</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="locks-table">
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">No locks</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/resources.js') }}"></script>
+{% endblock %}
