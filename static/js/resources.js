@@ -1,6 +1,7 @@
 function initResources() {
     initializeResourceForm();
     initializeLockForm();
+    initializeAutoImport();
     loadResources();
     loadTransactions();
     loadLocks();
@@ -59,6 +60,42 @@ function initializeLockForm() {
         }
         
         alert('Lock request functionality - backend implementation pending');
+    });
+}
+
+function initializeAutoImport() {
+    const autoImportBtn = document.getElementById('auto-import-resources-btn');
+    
+    autoImportBtn.addEventListener('click', function() {
+        if (!activeRunId) {
+            alert('Please select a simulation run first');
+            return;
+        }
+        
+        if (!confirm('This will import real system resources (CPU, RAM, Disk, Network). Continue?')) {
+            return;
+        }
+        
+        autoImportBtn.disabled = true;
+        autoImportBtn.innerHTML = '<i class="bi bi-spinner spin"></i> Importing...';
+        
+        fetch(`/api/runs/${activeRunId}/resources/auto-import`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            loadResources();
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Error auto-importing resources:', error);
+            alert('Error auto-importing resources');
+        })
+        .finally(() => {
+            autoImportBtn.disabled = false;
+            autoImportBtn.innerHTML = '<i class="bi bi-magic"></i> Auto-Import from System';
+        });
     });
 }
 

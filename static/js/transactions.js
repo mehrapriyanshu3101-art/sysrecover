@@ -1,6 +1,7 @@
 function initTransactions() {
     initializeTransactionForm();
     initializeOperationForm();
+    initializeAutoGenerate();
     loadTransactions();
 }
 
@@ -57,6 +58,42 @@ function initializeOperationForm() {
         }
         
         alert(`Operation: ${operation} on ${dataItem} - Full implementation pending`);
+    });
+}
+
+function initializeAutoGenerate() {
+    const autoGenerateBtn = document.getElementById('auto-generate-transactions-btn');
+    
+    autoGenerateBtn.addEventListener('click', function() {
+        if (!activeRunId) {
+            alert('Please select a simulation run first');
+            return;
+        }
+        
+        if (!confirm('This will generate 5 realistic transactions automatically. Continue?')) {
+            return;
+        }
+        
+        autoGenerateBtn.disabled = true;
+        autoGenerateBtn.innerHTML = '<i class="bi bi-spinner spin"></i> Generating...';
+        
+        fetch(`/api/runs/${activeRunId}/transactions/auto-generate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            loadTransactions();
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Error auto-generating transactions:', error);
+            alert('Error auto-generating transactions');
+        })
+        .finally(() => {
+            autoGenerateBtn.disabled = false;
+            autoGenerateBtn.innerHTML = '<i class="bi bi-magic"></i> Auto-Generate Transactions';
+        });
     });
 }
 

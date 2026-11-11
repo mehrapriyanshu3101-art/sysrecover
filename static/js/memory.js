@@ -2,6 +2,7 @@ let memoryChart = null;
 
 function initMemory() {
     initializeMemoryForm();
+    initializeAutoImport();
 }
 
 function initializeMemoryForm() {
@@ -38,6 +39,39 @@ function initializeMemoryForm() {
         .catch(error => {
             console.error('Error running memory simulation:', error);
             alert('Error running memory simulation');
+        });
+    });
+}
+
+function initializeAutoImport() {
+    const autoImportBtn = document.getElementById('auto-import-memory-btn');
+    
+    autoImportBtn.addEventListener('click', function() {
+        if (!activeRunId) {
+            alert('Please select a simulation run first');
+            return;
+        }
+        
+        autoImportBtn.disabled = true;
+        autoImportBtn.innerHTML = '<i class="bi bi-spinner spin"></i> Generating...';
+        
+        fetch(`/api/runs/${activeRunId}/memory/auto-import`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('reference-string').value = data.reference_string.join(',');
+            document.getElementById('num-frames').value = data.num_frames;
+            alert(`Generated reference string from system memory patterns.\nSystem Memory: ${data.system_info.total_gb.toFixed(1)} GB total, ${data.system_info.used_percent}% used`);
+        })
+        .catch(error => {
+            console.error('Error auto-generating memory reference:', error);
+            alert('Error auto-generating memory reference');
+        })
+        .finally(() => {
+            autoImportBtn.disabled = false;
+            autoImportBtn.innerHTML = '<i class="bi bi-magic"></i> Auto-Generate from System';
         });
     });
 }

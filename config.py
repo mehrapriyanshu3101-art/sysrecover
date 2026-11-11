@@ -5,6 +5,10 @@ load_dotenv()
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key-change-in-production'
-    DATABASE_URL = os.environ.get('DATABASE_URL') or 'sqlite:///sysrecover.db'
-    SQLALCHEMY_DATABASE_URI = DATABASE_URL
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    
+    # MySQL Configuration
+    MYSQL_HOST = os.environ.get('MYSQL_HOST') or 'localhost'
+    MYSQL_PORT = int(os.environ.get('MYSQL_PORT') or '3306')
+    MYSQL_USER = os.environ.get('MYSQL_USER') or 'root'
+    MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD') or 'Mehra@3101'
+    MYSQL_DATABASE = os.environ.get('MYSQL_DATABASE') or 'sysrecover_db'

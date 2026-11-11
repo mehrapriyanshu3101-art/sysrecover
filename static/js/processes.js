@@ -1,5 +1,6 @@
 function initProcesses() {
     initializeProcessForm();
+    initializeAutoImport();
     loadProcesses();
 }
 
@@ -38,6 +39,42 @@ function initializeProcessForm() {
         .catch(error => {
             console.error('Error creating process:', error);
             alert('Error creating process');
+        });
+    });
+}
+
+function initializeAutoImport() {
+    const autoImportBtn = document.getElementById('auto-import-btn');
+    
+    autoImportBtn.addEventListener('click', function() {
+        if (!activeRunId) {
+            alert('Please select a simulation run first');
+            return;
+        }
+        
+        if (!confirm('This will import real processes from your Windows Task Manager. Continue?')) {
+            return;
+        }
+        
+        autoImportBtn.disabled = true;
+        autoImportBtn.innerHTML = '<i class="bi bi-spinner spin"></i> Importing...';
+        
+        fetch(`/api/runs/${activeRunId}/processes/auto-import`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            loadProcesses();
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Error auto-importing processes:', error);
+            alert('Error auto-importing processes');
+        })
+        .finally(() => {
+            autoImportBtn.disabled = false;
+            autoImportBtn.innerHTML = '<i class="bi bi-magic"></i> Auto-Import from System';
         });
     });
 }
