@@ -1,22 +1,25 @@
 from flask import Blueprint, jsonify
-from models import SimulationRun, Process, Transaction, EventLog
-from database.connection import db
+from database.dao import SimulationRunDAO, ProcessDAO, TransactionDAO
+from database.mysql_connection import db
 
 dashboard_bp = Blueprint('dashboard', __name__)
 
 @dashboard_bp.route('/runs/<int:run_id>/dashboard', methods=['GET'])
 def get_dashboard_metrics(run_id):
-    SimulationRun.query.get_or_404(run_id)
+    if not SimulationRunDAO.get_by_id(run_id):
+        return jsonify({'error': 'Run not found'}), 404
     
-    process_count = Process.query.filter_by(run_id=run_id).count()
-    transaction_count = Transaction.query.filter_by(run_id=run_id).count()
-    recent_events = EventLog.query.filter_by(run_id=run_id).order_by(EventLog.timestamp.desc()).limit(10).all()
+    processes = ProcessDAO.get_by_run_id(run_id)
+    transactions = TransactionDAO.get_by_run_id(run_id)
     
-    run = SimulationRun.query.get(run_id)
+    query = "SELECT * FROM event_log WHERE run_id = %s ORDER BY timestamp DESC LIMIT 10"
+    recent_events = db.execute_query(query, (run_id,))
+    
+    run = SimulationRunDAO.get_by_id(run_id)
     
     return jsonify({
-        'process_count': process_count,
-        'transaction_count': transaction_count,
-        'status': run.status,
-        'recent_events': [e.to_dict() for e in recent_events]
+        'process_count': len(processes),
+        'transaction_count': len(transactions),
+        'status': run['status'],
+        'recent_events': recent_events
     })

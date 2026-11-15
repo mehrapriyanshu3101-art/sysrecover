@@ -59,10 +59,6 @@ def create_app():
     def events_page():
         return render_template('events.html')
     
-    @app.route('/reports')
-    def reports_page():
-        return render_template('reports.html')
-    
     @app.route('/about')
     def about_page():
         return render_template('about.html')

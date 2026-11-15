@@ -2,9 +2,12 @@ function initResources() {
     initializeResourceForm();
     initializeLockForm();
     initializeAutoImport();
-    loadResources();
-    loadTransactions();
-    loadLocks();
+    
+    if (activeRunId) {
+        loadResources();
+        loadTransactions();
+        loadLocks();
+    }
 }
 
 function initializeResourceForm() {
@@ -50,6 +53,11 @@ function initializeLockForm() {
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         
+        if (!activeRunId) {
+            alert('Please select a simulation run first');
+            return;
+        }
+        
         const transactionId = parseInt(document.getElementById('lock-transaction').value);
         const resourceId = parseInt(document.getElementById('lock-resource').value);
         const lockType = document.getElementById('lock-type').value;
@@ -59,7 +67,26 @@ function initializeLockForm() {
             return;
         }
         
-        alert('Lock request functionality - backend implementation pending');
+        fetch(`/api/runs/${activeRunId}/locks`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                transaction_id: transactionId,
+                resource_id: resourceId,
+                lock_type: lockType
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            loadLocks();
+            loadResources();
+            form.reset();
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Error creating lock:', error);
+            alert('Error creating lock');
+        });
     });
 }
 
@@ -138,8 +165,6 @@ function loadResources() {
 }
 
 function loadTransactions() {
-    console.log('loadTransactions called, activeRunId:', activeRunId);
-    
     if (!activeRunId) {
         const select = document.getElementById('lock-transaction');
         if (select) {
@@ -149,15 +174,10 @@ function loadTransactions() {
     }
     
     const url = `/api/runs/${activeRunId}/transactions`;
-    console.log('Fetching transactions from:', url);
-    
+
     fetch(url)
-        .then(response => {
-            console.log('Response status:', response.status);
-            return response.json();
-        })
+        .then(response => response.json())
         .then(transactions => {
-            console.log('Transactions received:', transactions);
             const select = document.getElementById('lock-transaction');
             if (!select) {
                 console.error('Transaction select element not found');
@@ -187,8 +207,32 @@ function loadLocks() {
         return;
     }
     
-    const table = document.getElementById('locks-table');
-    table.innerHTML = '<tr><td colspan="5" class="text-center text-muted">Lock loading to be implemented</td></tr>';
+    fetch(`/api/runs/${activeRunId}/locks`)
+        .then(response => response.json())
+        .then(locks => {
+            const table = document.getElementById('locks-table');
+            
+            if (locks.length > 0) {
+                table.innerHTML = locks.map(l => `
+                    <tr>
+                        <td>T${l.transaction_id}</td>
+                        <td>R${l.resource_id}</td>
+                        <td>${l.lock_type}</td>
+                        <td><span class="badge badge-${l.status === 'granted' ? 'success' : 'warning'}">${l.status}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-danger" onclick="deleteLock(${l.lock_id})">Release</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } else {
+                table.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No locks yet. Request a lock to get started.</td></tr>';
+            }
+        })
+        .catch(error => {
+            console.error('Error loading locks:', error);
+            const table = document.getElementById('locks-table');
+            table.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error loading locks</td></tr>';
+        });
 }
 
 function deleteResource(resourceId) {
@@ -196,5 +240,46 @@ function deleteResource(resourceId) {
         return;
     }
     
-    alert('Resource deletion - backend implementation pending');
+    if (!activeRunId) {
+        alert('Please select a simulation run first');
+        return;
+    }
+    
+    fetch(`/api/runs/${activeRunId}/resources/${resourceId}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        loadResources();
+        alert(data.message);
+    })
+    .catch(error => {
+        console.error('Error deleting resource:', error);
+        alert('Error deleting resource');
+    });
+}
+
+function deleteLock(lockId) {
+    if (!confirm('Are you sure you want to release this lock?')) {
+        return;
+    }
+    
+    if (!activeRunId) {
+        alert('Please select a simulation run first');
+        return;
+    }
+    
+    fetch(`/api/runs/${activeRunId}/locks/${lockId}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        loadLocks();
+        loadResources();
+        alert(data.message);
+    })
+    .catch(error => {
+        console.error('Error releasing lock:', error);
+        alert('Error releasing lock');
+    });
 }

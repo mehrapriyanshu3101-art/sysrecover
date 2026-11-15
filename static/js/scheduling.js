@@ -78,16 +78,18 @@ function displayGanttChart(ganttData) {
     }
     
     const labels = ganttData.map(g => g.process);
-    const data = ganttData.map(g => g.duration);
-    
+    // Floating bars: each block spans from its start time to its end time
+    const data = ganttData.map(g => [g.start, g.end]);
+
     ganttChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: labels,
             datasets: [{
-                label: 'Execution Time',
+                label: 'Execution',
                 data: data,
-                backgroundColor: '#0d6efd'
+                backgroundColor: '#0d6efd',
+                barPercentage: 0.7
             }]
         },
         options: {
@@ -96,10 +98,21 @@ function displayGanttChart(ganttData) {
             plugins: {
                 legend: {
                     display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const start = context.raw[0];
+                            const end = context.raw[1];
+                            return `start ${start}, end ${end} (${end - start} unit${end - start === 1 ? '' : 's'})`;
+                        }
+                    }
                 }
             },
             scales: {
                 x: {
+                    type: 'linear',
+                    beginAtZero: true,
                     title: {
                         display: true,
                         text: 'Time'

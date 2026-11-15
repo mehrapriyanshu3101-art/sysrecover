@@ -9,7 +9,12 @@ function initializeMemoryForm() {
     const form = document.getElementById('memory-form');
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        
+
+        if (!activeRunId) {
+            alert('Please select a simulation run first');
+            return;
+        }
+
         const referenceString = document.getElementById('reference-string').value
             .split(',')
             .map(s => parseInt(s.trim()))
@@ -23,7 +28,7 @@ function initializeMemoryForm() {
             return;
         }
         
-        fetch(`/api/runs/${activeRunId || 1}/memory/run`, {
+        fetch(`/api/runs/${activeRunId}/memory/run`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

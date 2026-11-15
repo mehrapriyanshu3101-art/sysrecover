@@ -33,6 +33,34 @@ class LockDAO:
         return LockDAO.get_by_id(lock_id)
     
     @staticmethod
+    def grant_next_waiting(resource_id):
+        """Grant the oldest waiting lock for a resource, if it is free"""
+        resource = db.execute_query(
+            "SELECT available_instances FROM resource WHERE resource_id = %s",
+            (resource_id,)
+        )
+        if not resource or resource[0]['available_instances'] <= 0:
+            return None
+
+        waiting = db.execute_query(
+            "SELECT * FROM locks WHERE resource_id = %s AND status = 'waiting' ORDER BY lock_id LIMIT 1",
+            (resource_id,)
+        )
+        if not waiting:
+            return None
+
+        lock_id = waiting[0]['lock_id']
+        db.execute_query(
+            "UPDATE locks SET status = 'granted', granted_at = NOW() WHERE lock_id = %s",
+            (lock_id,), fetch=False
+        )
+        db.execute_query(
+            "UPDATE resource SET available_instances = available_instances - 1 WHERE resource_id = %s",
+            (resource_id,), fetch=False
+        )
+        return LockDAO.get_by_id(lock_id)
+
+    @staticmethod
     def delete(lock_id):
         """Delete a lock"""
         query = "DELETE FROM locks WHERE lock_id = %s"
@@ -47,5 +75,5 @@ class LockDAO:
             'resource_id': lock['resource_id'],
             'lock_type': lock['lock_type'],
             'status': lock['status'],
-            'granted_at': lock['granted_at'].isoformat() if lock['granted_at'] else None
+            'granted_at': lock['granted_at']
         }

@@ -1,18 +1,18 @@
-from models import SimulationRun, Process, Transaction, EventLog
+from database.dao import SimulationRunDAO, ProcessDAO, TransactionDAO, EventLogDAO
 
 class DiagnosticService:
     def analyze(self, run_id):
         """Analyze simulation run and generate findings"""
-        run = SimulationRun.query.get(run_id)
-        processes = Process.query.filter_by(run_id=run_id).all()
-        transactions = Transaction.query.filter_by(run_id=run_id).all()
-        events = EventLog.query.filter_by(run_id=run_id).all()
+        run = SimulationRunDAO.get_by_id(run_id)
+        processes = ProcessDAO.get_by_run_id(run_id)
+        transactions = TransactionDAO.get_by_run_id(run_id)
+        events = EventLogDAO.get_by_run_id(run_id)
         
         findings = []
         
         # Analyze processes
         if processes:
-            avg_waiting = sum(p.waiting_time or 0 for p in processes) / len(processes)
+            avg_waiting = sum(p.get('waiting_time', 0) or 0 for p in processes) / len(processes)
             if avg_waiting > 10:
                 findings.append({
                     'type': 'warning',
@@ -22,7 +22,7 @@ class DiagnosticService:
                 })
         
         # Analyze transactions
-        active_transactions = [t for t in transactions if t.status == 'active']
+        active_transactions = [t for t in transactions if t['status'] == 'active']
         if len(active_transactions) > 5:
             findings.append({
                 'type': 'warning',
@@ -32,7 +32,7 @@ class DiagnosticService:
             })
         
         # Analyze events
-        error_events = [e for e in events if e.severity == 'error']
+        error_events = [e for e in events if e['severity'] == 'error']
         if error_events:
             findings.append({
                 'type': 'error',
@@ -51,7 +51,7 @@ class DiagnosticService:
         
         return {
             'run_id': run_id,
-            'run_name': run.name,
+            'run_name': run['name'],
             'findings': findings,
             'summary': f'{len(findings)} findings detected'
         }

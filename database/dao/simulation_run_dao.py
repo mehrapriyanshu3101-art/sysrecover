@@ -51,6 +51,6 @@ class SimulationRunDAO:
             'name': run['name'],
             'description': run['description'],
             'status': run['status'],
-            'created_at': run['created_at'].isoformat() if run['created_at'] else None,
-            'finished_at': run['finished_at'].isoformat() if run['finished_at'] else None
+            'created_at': run['created_at'],
+            'finished_at': run['finished_at']
         }

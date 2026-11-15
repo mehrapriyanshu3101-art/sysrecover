@@ -1,6 +1,8 @@
 function initEvents() {
     initializeFilters();
-    loadEvents();
+    if (activeRunId) {
+        loadEvents();
+    }
 }
 
 function initializeFilters() {

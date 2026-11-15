@@ -1,3 +1,3 @@
-from .connection import db, init_db
+from .mysql_connection import db
 
-__all__ = ['db', 'init_db']
+__all__ = ['db']

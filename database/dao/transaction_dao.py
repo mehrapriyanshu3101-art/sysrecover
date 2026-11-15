@@ -57,8 +57,8 @@ class TransactionDAO:
             'process_id': transaction['process_id'],
             'type': transaction['type'],
             'status': transaction['status'],
-            'start_time': transaction['start_time'].isoformat() if transaction['start_time'] else None,
-            'commit_time': transaction['commit_time'].isoformat() if transaction['commit_time'] else None,
-            'rollback_time': transaction['rollback_time'].isoformat() if transaction['rollback_time'] else None,
+            'start_time': transaction['start_time'],
+            'commit_time': transaction['commit_time'],
+            'rollback_time': transaction['rollback_time'],
             'two_phase_state': transaction['two_phase_state']
         }

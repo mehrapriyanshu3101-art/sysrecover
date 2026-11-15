@@ -35,8 +35,7 @@ function loadRuns() {
 }
 
 function selectRun(runId) {
-    activeRunId = runId;
-    document.getElementById('active-run-select').value = runId;
+    setActiveRun(runId);
     alert(`Run ${runId} selected`);
     loadRuns();
 }
@@ -70,11 +69,10 @@ function deleteRun(runId) {
     })
     .then(response => response.json())
     .then(data => {
-        loadRuns();
         if (activeRunId === runId) {
-            activeRunId = null;
-            document.getElementById('active-run-select').value = '';
+            setActiveRun(null);
         }
+        loadRuns();
         alert('Run deleted successfully');
     })
     .catch(error => {
